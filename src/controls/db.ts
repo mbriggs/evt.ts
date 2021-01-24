@@ -12,3 +12,10 @@ export function url() {
 export function connection() {
   return db.connect(url());
 }
+
+export async function exec() {
+  let conn = await connection();
+  return (streamName: string, values: any[]): Promise<any> => {
+    return conn.query(streamName, values);
+  };
+}
