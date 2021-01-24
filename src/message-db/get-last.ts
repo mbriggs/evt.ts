@@ -9,11 +9,11 @@ export async function getLast(
   const q = "SELECT * FROM get_last_stream_message($1::varchar)";
   let result = await exec(q, [streamName]);
 
-  switch (result.length) {
+  switch (result.rowCount) {
     case 0:
       return null;
     case 1:
-      return loadData(result[0]);
+      return loadData(result.rows[0]);
     default:
       throw new Error("got more then one message");
   }
