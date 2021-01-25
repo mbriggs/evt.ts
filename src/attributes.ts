@@ -1,4 +1,5 @@
-import { metadata } from "@mbriggs/evt/metadata";
+import { metadata } from "./metadata";
+import { getClass } from "./inspect";
 
 class AttributesMetadata {
   propNames: Set<string> = new Set<string>();
@@ -11,11 +12,15 @@ export function attribute() {
   };
 }
 
-export function hasAttribute(msg: any, name: string) {
+export function has(msg: any, name: string) {
   return metadata(msg, AttributesMetadata).propNames.has(name);
 }
 
-export function attributes(msg: any) {
+export function list(msg: any) {
+  return metadata(msg, AttributesMetadata).propNames;
+}
+
+export function getAll(msg: any) {
   let meta = metadata(msg, AttributesMetadata);
   let attrs = {};
 
@@ -24,4 +29,28 @@ export function attributes(msg: any) {
   }
 
   return attrs;
+}
+
+export function set(msg: any, data: any) {
+  let meta = metadata(msg, AttributesMetadata);
+  let attrs = meta.propNames;
+
+  for (let key of Object.keys(data)) {
+    if (has(msg, key)) {
+      continue;
+    }
+
+    let cls = getClass(msg);
+    throw new Error(`${cls.name} does not contain an attribute for '${key}'`);
+  }
+
+  for (let prop of attrs) {
+    if (!(prop in data)) {
+      let cls = getClass(msg);
+      let d = JSON.stringify(data);
+      throw new Error(`${cls.name} has attribute ${prop}, but missing in ${d}`);
+    }
+
+    msg[prop] = data[prop];
+  }
 }
