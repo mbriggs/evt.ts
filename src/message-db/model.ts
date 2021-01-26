@@ -1,5 +1,13 @@
 export type Exec = (text: string, values: any[]) => Promise<any>;
 
+export type Get = (streamName: string, position?: number) => Promise<Message[]>;
+export type GetLast = (streamName: string) => Promise<Message>;
+export type Put = (
+  batch: Message[] | Message,
+  streamName: string,
+  expectedVersion?: number
+) => Promise<Message>;
+
 export class ExpectedVersionError extends Error {}
 
 export interface Metadata {
@@ -8,7 +16,6 @@ export interface Metadata {
   causationMessageGlobalPosition: number;
   correlationStreamName: string;
   replyStreamName: string;
-  time: Date;
   schemaVersion: string;
 }
 
