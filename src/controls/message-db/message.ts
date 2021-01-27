@@ -38,6 +38,7 @@ export function examples(streamName: string, amount: number): mdb.Message[] {
 
   for (let position = 0; position < amount; position += 1) {
     let m = example();
+    m.id = id();
     m.position = position;
     m.streamName = streamName;
 

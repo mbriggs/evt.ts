@@ -7,6 +7,7 @@ export type Put = (
   streamName: string,
   expectedVersion?: number
 ) => Promise<Message>;
+export type Iterate = (streamName: string, position?: number) => AsyncGenerator<Message>;
 
 export class ExpectedVersionError extends Error {}
 

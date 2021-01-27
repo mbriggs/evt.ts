@@ -15,7 +15,5 @@ export function connection() {
 
 export async function exec() {
   let conn = await connection();
-  return (streamName: string, values: any[]): Promise<any> => {
-    return conn.query(streamName, values);
-  };
+  return conn.query.bind(conn);
 }
