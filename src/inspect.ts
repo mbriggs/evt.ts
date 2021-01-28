@@ -66,6 +66,15 @@ export function getClass(obj) {
   return proto.constructor;
 }
 
+export function getClassName(obj) {
+  let cls = getClass(obj);
+  if (!cls) {
+    return null;
+  }
+
+  return cls.name;
+}
+
 export function getPrototype(obj) {
   let proto;
 
