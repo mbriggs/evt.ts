@@ -6,7 +6,7 @@ export function example() {
 }
 
 export function uniqueExample() {
-  return `${category()}-${identity.random()}`;
+  return `${category()}-${uniqueId()}`;
 }
 
 export function uniqueCategory() {
@@ -37,6 +37,10 @@ export function category() {
 
 export function id() {
   return "id";
+}
+
+export function uniqueId() {
+  return identity.random();
 }
 
 export function cardinalId() {

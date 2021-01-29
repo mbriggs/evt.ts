@@ -1,36 +1,40 @@
-import * as mesg from "./messaging";
 import * as mdb from "./message-db";
+import { isFunction } from "lodash";
 
-export type Handler<C, R = void> = (msg: mdb.Message, ctx: C) => Promise<R> | R;
-export interface HandlerBuilder<C, R = void> {
-  handler(): Handler<C, R>;
+export type Handler<C> = (msg: mdb.Message, ctx: C) => Promise<any> | void;
+export interface HandlerBuilder<C> {
+  handler(): Handler<C>;
 }
 
-export type MessageHandler<T extends mesg.Message, C, R = void> = (
-  msg: T,
-  ctx: C
-) => Promise<R> | R;
+export function toHandler<C>(handler: Handler<C> | HandlerBuilder<C>): Handler<C> {
+  if (isFunction(handler)) {
+    return handler;
+  }
 
-export interface UserType<T extends mesg.Message = any> {
-  fromMessageDB(msg: mdb.Message): T;
+  return handler.handler();
+}
+
+export type MessageHandler<T, C> = (msg: T, ctx: C) => Promise<any> | void;
+
+export interface Cls<T> {
   new (...args: any[]): T;
   name: string;
 }
 
-export class Dispatcher<C, R = void> implements HandlerBuilder<C, R> {
-  userTypes = new Map<string, UserType>();
-  messageHandlers = new Map<string, MessageHandler<any, C, R>>();
+export class Dispatcher<C> implements HandlerBuilder<C> {
+  userTypes = new Map<string, Cls<any>>();
+  messageHandlers = new Map<string, MessageHandler<any, C>>();
 
-  handle<T extends mesg.Message>(
-    cls: UserType<T>,
-    handler: (msg: T, ctx: C) => R | Promise<R>
-  ) {
+  handle<T>(cls: Cls<T>, handler: (msg: T, ctx: C) => Promise<any> | void) {
+    if (!(cls as any).fromMessageDB) {
+      throw new Error(`${cls.name} must be a message class`);
+    }
     let type = cls.name;
     this.userTypes.set(type, cls);
     this.messageHandlers.set(type, handler);
   }
 
-  handler(): Handler<C, R> {
+  handler(): Handler<C> {
     return (data: mdb.Message, ctx?: any) => {
       if (!this.userTypes.has(data.type)) {
         return;
@@ -39,7 +43,7 @@ export class Dispatcher<C, R = void> implements HandlerBuilder<C, R> {
       let cls = this.userTypes.get(data.type);
       let handler = this.messageHandlers.get(data.type);
 
-      let msg = cls.fromMessageDB(data);
+      let msg = (cls as any).fromMessageDB(data);
 
       let result = handler(msg, ctx);
 

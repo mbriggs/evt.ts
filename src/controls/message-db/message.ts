@@ -20,6 +20,10 @@ export function example(): mdb.Message {
   };
 }
 
+export function alternate(): mdb.Message {
+  return { ...example(), data: data.alternate() };
+}
+
 export function newExample(): mdb.Message {
   return {
     id: id(),

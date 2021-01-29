@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import { isFunction } from "lodash";
 
 const toString = Object.toString;
 
@@ -50,10 +51,6 @@ function fnBody(fn) {
     .call(fn)
     .replace(/^[^{]*{\s*/, "")
     .replace(/\s*}[^}]*$/, "");
-}
-
-export function isFunction(fn) {
-  return typeof fn === "function";
 }
 
 export function getClass(obj) {

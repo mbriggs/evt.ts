@@ -9,11 +9,11 @@ describe("handler", () => {
 
     let results = { msg: null };
     let dispatcher = new Dispatcher();
-    dispatcher.handle(mesgc.MyMessage, (msg) => (results.msg = msg.toMessageDB()));
+    dispatcher.handle(mesgc.MyMessage, (msg, _) => (results.msg = msg.toMessageDB()));
 
     let handler = dispatcher.handler();
 
-    handler(msg);
+    handler(msg, {});
 
     assert.deepEqual(results.msg, msg);
   });
@@ -25,6 +25,6 @@ describe("handler", () => {
 
     let handler = dispatcher.handler();
 
-    assert.doesNotThrow(() => handler(msg));
+    assert.doesNotThrow(() => handler(msg, {}));
   });
 });

@@ -32,7 +32,6 @@ export async function getLast(): Promise<mdb.GetLast> {
 
 export async function put(): Promise<mdb.Put> {
   let exec = await dbc.exec();
-  let s = settings();
 
   return partial(mdb.put, exec);
 }
