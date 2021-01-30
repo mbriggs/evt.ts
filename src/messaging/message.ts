@@ -22,7 +22,7 @@ export class Message {
     return next;
   }
 
-  static fromMessageDB(data: mdb.Message) {
+  static fromMessageDB<T extends Message>(data: mdb.Message): T {
     if (this.name !== data.type) {
       throw new Error(`Cannot create ${this.name} from ${data.type}`);
     }
@@ -33,7 +33,7 @@ export class Message {
     attributes.set(msg, data.data);
     metadata.read(data);
 
-    return msg;
+    return msg as any;
   }
 
   metadata(): MessageData {

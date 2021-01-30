@@ -56,8 +56,9 @@ export function name(data: Partial<Name>) {
 }
 
 export function entity(streamName: string) {
-  let [cat, _id] = split(streamName);
-  return cat;
+  let category = getCategory(streamName);
+  let [entity, _] = category.split(CATEGORY_TYPE_SEPARATOR, 2);
+  return entity;
 }
 
 export function split(name: string): [string, string] {
