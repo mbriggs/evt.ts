@@ -17,5 +17,6 @@ export * from "./attributes";
 export * from "./messaging";
 export * from "./handler";
 export * from "./interfaces";
+export * from "./host";
 
 export { stream };

@@ -4,7 +4,7 @@ import { accountProjection } from "./projection";
 import { commandHandler } from "./handler/commands";
 import { partial } from "lodash";
 
-export async function start({ fetch, write, consumer }: Toolkit) {
+export default async function start({ fetch, write, consumer }: Toolkit) {
   let readAccount = partial(fetch, Account, accountProjection(), "account");
 
   await startConsumer(
