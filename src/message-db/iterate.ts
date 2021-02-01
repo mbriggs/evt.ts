@@ -1,12 +1,11 @@
-import { Message } from "./model";
-import { isCategory } from "@mbriggs/evt/stream";
-import { Get } from "@mbriggs/evt/interfaces";
+import { isCategory } from "../stream";
+import { MessageData, Get } from "../messaging";
 
 export async function* iterate(
   get: Get,
   streamName: string,
   position: number = null
-): AsyncGenerator<Message> {
+): AsyncGenerator<MessageData> {
   while (true) {
     let messages = await get(streamName, position);
 

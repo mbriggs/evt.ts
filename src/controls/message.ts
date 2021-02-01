@@ -2,6 +2,7 @@ import { attribute } from "../attributes";
 import { Message } from "../messaging";
 
 import * as mdbc from "./message-db";
+import * as mdatac from "./message-data";
 
 import { field1, field2, field3 } from "./data";
 export { field1, field2, field3 };
@@ -22,7 +23,7 @@ export class MyMessage extends Message {
 export function sourceExample() {
   let msg = newSourceExample();
 
-  let data = mdbc.message.example();
+  let data = mdatac.example();
   msg.metadata().read(data);
 
   return msg;

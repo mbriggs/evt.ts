@@ -1,12 +1,13 @@
-import { Message, Settings } from "@mbriggs/evt/message-db/model";
-import { loadData } from "@mbriggs/evt/message-db/load-data";
-import { Exec } from "@mbriggs/evt/interfaces";
+import { Settings } from "./model";
+import { loadData } from "./load-data";
+import { Exec } from "../interfaces";
+import { MessageData } from "../messaging";
 
 export async function getLast(
   exec: Exec,
   settings: Settings,
   streamName: string
-): Promise<Message> {
+): Promise<MessageData> {
   const q = "SELECT * FROM get_last_stream_message($1::varchar)";
   let result = await exec(q, [streamName]);
 

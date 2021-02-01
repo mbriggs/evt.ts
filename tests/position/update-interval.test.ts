@@ -1,7 +1,7 @@
 import assert from "assert";
 
 import * as streamc from "@mbriggs/evt/controls/stream";
-import * as mdbc from "@mbriggs/evt/controls/message-db";
+import * as mdatac from "@mbriggs/evt/controls/message-data";
 import * as posc from "@mbriggs/evt/controls/position";
 
 describe("position", () => {
@@ -10,8 +10,8 @@ describe("position", () => {
     let record = await posc.record();
 
     let streamName = streamc.uniqueExample();
-    let msg = mdbc.message.example();
-    let position = mdbc.message.position();
+    let msg = mdatac.example();
+    let position = mdatac.position();
     msg.streamName = streamName;
     msg.position = position;
 

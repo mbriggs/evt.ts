@@ -5,6 +5,7 @@ import * as mdb from "@mbriggs/evt/message-db";
 
 import * as dbc from "@mbriggs/evt/controls/db";
 import * as mdbc from "@mbriggs/evt/controls/message-db";
+import * as mdatac from "@mbriggs/evt/controls/message-data";
 import * as streamc from "@mbriggs/evt/controls/stream";
 
 describe("MessageDB", () => {
@@ -13,7 +14,7 @@ describe("MessageDB", () => {
       let exec = await dbc.exec();
       let settings = mdbc.settings();
       let stream = streamc.uniqueExample();
-      let msgs = mdbc.message.examples(stream, 10);
+      let msgs = mdatac.examples(stream, 10);
 
       await mdb.put(exec, msgs, stream);
 

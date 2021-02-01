@@ -1,7 +1,7 @@
 import camelcaseKeys from "camelcase-keys";
-import { Message } from "./model";
+import { MessageData } from "../messaging";
 
-export function loadData(row: any): Message {
+export function loadData(row: any): MessageData {
   let result = {
     ...row,
     data: JSON.parse(row.data),

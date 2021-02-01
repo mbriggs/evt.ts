@@ -1,7 +1,7 @@
-import * as mdb from "../message-db";
+import { MessageData, MessageDataMetadata } from "../data";
 
-export class MessageData {
-  metadata: mdb.Metadata = {
+export class MessageMetadata {
+  metadata: MessageDataMetadata = {
     causationMessageStreamName: null,
     causationMessagePosition: null,
     causationMessageGlobalPosition: null,
@@ -64,7 +64,7 @@ export class MessageData {
     this.metadata.schemaVersion = val;
   }
 
-  read(message: mdb.Message) {
+  read(message: MessageData) {
     this.metadata = message.metadata;
     this.id = message.id;
     this.streamName = message.streamName;
@@ -73,7 +73,7 @@ export class MessageData {
     this.time = message.time;
   }
 
-  write(message: mdb.Message) {
+  write(message: MessageData) {
     message.metadata = this.metadata;
     message.id = this.id;
     message.streamName = this.streamName;
@@ -86,7 +86,7 @@ export class MessageData {
     return this.position != null && this.globalPosition != null && this.streamName != null;
   }
 
-  follow(other: MessageData) {
+  follow(other: MessageMetadata) {
     if (!other.isPersisted()) {
       throw new Error("Could not follow unpersisted message");
     }

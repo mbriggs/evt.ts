@@ -6,7 +6,7 @@ import * as pos from "./position";
 import * as csmr from "./consumer";
 import * as entity from "./entity";
 
-export function build(exec: Exec, settings: Settings): Toolkit {
+export function messageDB(exec: Exec, settings: Settings): Toolkit {
   let put = partial(mdb.put, exec);
   let write = mesg.writer(put);
   let get = partial(mdb.get, exec, settings);

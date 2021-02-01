@@ -48,7 +48,7 @@ export async function host(config: Config, start: (toolkit: Toolkit) => Promise<
     }
   }
 
-  let tools = toolkit.build(exec, settings);
+  let tools = toolkit.messageDB(exec, settings);
 
   await start(tools);
 }

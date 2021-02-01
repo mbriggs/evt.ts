@@ -1,5 +1,4 @@
-import * as mdb from "./message-db";
-import { Iterate } from "@mbriggs/evt/interfaces";
+import { Iterate, MessageData } from "./messaging";
 
 export interface Settings {
   pollInterval: number;
@@ -8,8 +7,9 @@ export interface Settings {
 export type UpdatePosition = (
   name: string,
   lastPosition: number,
-  msg: mdb.Message
+  msg: MessageData
 ) => Promise<number>;
+
 export type RestorePosition = (consumerName: string, streamName: string) => Promise<number>;
 
 export async function* consumer(

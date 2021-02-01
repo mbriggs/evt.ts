@@ -1,8 +1,10 @@
+import { cloneDeep } from "lodash";
+
 import * as stream from "./stream";
 
 import { Handler, HandlerBuilder, toHandler } from "./handler";
-import { cloneDeep } from "lodash";
-import { Cls, Iterate } from "./interfaces";
+import { Iterate } from "./messaging";
+import { Cls } from "./interfaces";
 
 export type Entry<T> = [T, number];
 

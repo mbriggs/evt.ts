@@ -1,17 +1,8 @@
-import { Message } from "./message-db";
 import { Entry } from "./entity";
-import { Handler, HandlerBuilder } from "@mbriggs/evt/handler";
-import { Write } from "@mbriggs/evt/messaging/write";
+import { Handler, HandlerBuilder } from "./handler";
+import { GetLast, Get, Put, Iterate, Write, MessageData } from "./messaging";
 
 export type Exec = (text: string, values: any[]) => Promise<any>;
-export type Get = (streamName: string, position?: number) => Promise<Message[]>;
-export type GetLast = (streamName: string) => Promise<Message>;
-export type Put = (
-  batch: Message[] | Message,
-  streamName: string,
-  expectedVersion?: number
-) => Promise<Message>;
-export type Iterate = (streamName: string, position?: number) => AsyncGenerator<Message>;
 
 export type FetchEntity<T> = (
   entity: Cls<T>,
@@ -34,7 +25,10 @@ export interface Toolkit {
   consumer: Consumer;
 }
 
-export type Consumer = (consumerName: string, streamName: string) => AsyncGenerator<Message>;
+export type Consumer = (
+  consumerName: string,
+  streamName: string
+) => AsyncGenerator<MessageData>;
 
 export interface Settings {
   pollInterval: number;

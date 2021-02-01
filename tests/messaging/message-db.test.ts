@@ -1,14 +1,14 @@
 import assert from "assert";
 
 import * as mesgc from "@mbriggs/evt/controls/message";
-import * as mdbc from "@mbriggs/evt/controls/message-db";
+import * as mdatac from "@mbriggs/evt/controls/message-data";
 
 describe("messaging", () => {
   it("Converts from and to Message DB Messages", () => {
-    let data = mdbc.message.example();
+    let data = mdatac.example();
 
-    let msg = mesgc.MyMessage.fromMessageDB(data);
-    let result = msg.toMessageDB();
+    let msg = mesgc.MyMessage.fromMessageData(data);
+    let result = msg.toMessageData();
 
     assert.deepEqual(result, data);
   });

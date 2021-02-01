@@ -1,9 +1,9 @@
 import * as stream from "./stream";
-import * as mdb from "./message-db";
-import { Handler } from "@mbriggs/evt/handler";
+import { Handler } from "./handler";
+import { MessageData } from "./messaging";
 
 export async function startConsumer(
-  consumer: AsyncGenerator<mdb.Message>,
+  consumer: AsyncGenerator<MessageData>,
   ...handlers: Handler[]
 ) {
   for await (let msg of consumer) {

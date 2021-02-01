@@ -1,12 +1,13 @@
 import { v4 as uuid } from "uuid";
 import snakecase from "snakecase-keys";
-import { ExpectedVersionError, Message } from "@mbriggs/evt/message-db/model";
+import { ExpectedVersionError } from "./model";
 import { log, logData } from "./logging";
-import { Exec } from "@mbriggs/evt/interfaces";
+import { Exec } from "../interfaces";
+import { MessageData } from "../messaging";
 
 export async function put(
   exec: Exec,
-  batch: Message[] | Message,
+  batch: MessageData[] | MessageData,
   streamName: string,
   expectedVersion: number = null
 ): Promise<any> {
@@ -38,7 +39,7 @@ export async function put(
 
 async function putOne(
   exec: Exec,
-  message: Message,
+  message: MessageData,
   streamName: string,
   expectedVersion: number = null
 ): Promise<any> {

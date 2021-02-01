@@ -1,14 +1,15 @@
 import assert from "assert";
 import * as fec from "@mbriggs/evt/controls/fetch-entity";
-import * as mdbc from "@mbriggs/evt/controls/message-db";
+import * as mdatac from "@mbriggs/evt/controls/message-data";
+import * as mesgc from "@mbriggs/evt/controls/messaging";
 
 describe("fetch-entity", () => {
   it("Fetches an entity from a stream", async () => {
-    let put = await mdbc.put();
+    let put = await mesgc.put();
     let { fetchEntity, stream } = await fec.fetchUnique();
 
-    let alt = mdbc.message.alternate();
-    let msg = mdbc.message.example();
+    let alt = mdatac.alternate();
+    let msg = mdatac.example();
 
     await put(alt, stream);
 

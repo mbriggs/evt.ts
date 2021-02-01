@@ -1,8 +1,9 @@
-import * as mdb from "../message-db";
-import { Message } from "./message";
 import { partial } from "lodash";
+
+import { Message } from "./message";
 import { log } from "./logging";
-import { Put } from "@mbriggs/evt/interfaces";
+import { Put } from "./storage";
+import { MessageData } from "./data";
 
 export interface Write {
   (msg: Message, stream: string, expectedVersion?: number): Promise<any>;
@@ -25,12 +26,12 @@ export function write(
   batch: Message | Array<Message>,
   expectedVersion: number = null
 ) {
-  let data: mdb.Message | mdb.Message[];
+  let data: MessageData | MessageData[];
   if (Array.isArray(batch)) {
-    data = batch.map((m) => m.toMessageDB());
+    data = batch.map((m) => m.toMessageData());
   } else {
     log(`writing message`);
-    data = batch.toMessageDB();
+    data = batch.toMessageData();
   }
 
   return put(data, stream, expectedVersion);

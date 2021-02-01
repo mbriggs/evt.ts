@@ -1,8 +1,9 @@
 import { partial } from "lodash";
-import * as mdbc from "./message-db";
-import * as posc from "./position";
-import * as csmr from "../consumer";
 import { Consumer } from "../interfaces";
+import * as csmr from "../consumer";
+
+import * as posc from "./position";
+import * as mesgc from "./messaging";
 
 export function settings(): csmr.Settings {
   return { pollInterval: 0 };
@@ -13,7 +14,7 @@ export function name() {
 }
 
 export async function consumer(positionUpdateInterval = 5): Promise<Consumer> {
-  let iterate = await mdbc.iterate();
+  let iterate = await mesgc.iterate();
   let record = await posc.record();
   let retrieve = await posc.retrieve();
 

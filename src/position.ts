@@ -1,8 +1,6 @@
-import * as mdb from "./message-db";
 import * as stream from "./stream";
-import { Message } from "./messaging";
 import { attribute } from "./attributes";
-import { GetLast, Put } from "./interfaces";
+import { GetLast, Put, MessageData, Message } from "./messaging";
 
 export interface Settings {
   positionUpdateInterval: number;
@@ -24,7 +22,7 @@ export async function record(
   settings: Settings,
   name: string,
   lastWrite: number,
-  msg: mdb.Message
+  msg: MessageData
 ) {
   if (!msg.streamName) {
     throw new Error(`message has no stream name: ${JSON.stringify(msg)}`);
@@ -44,7 +42,7 @@ export async function record(
   let recorded = new Recorded();
   recorded.position = position;
 
-  await put(recorded.toMessageDB(), streamName);
+  await put(recorded.toMessageData(), streamName);
 
   return position;
 }

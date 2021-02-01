@@ -2,6 +2,10 @@ export function example() {
   return issuedTime();
 }
 
+export function exampleTimestamp() {
+  return issuedTimestamp();
+}
+
 export function issuedTime() {
   return new Date(1111, 1, 1, 1, 1, 1, 1);
 }

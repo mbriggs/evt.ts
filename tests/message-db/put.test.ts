@@ -4,7 +4,7 @@ import { sanitize } from "./sanitize";
 import * as mdb from "@mbriggs/evt/message-db";
 
 import * as dbc from "@mbriggs/evt/controls/db";
-import * as mdbc from "@mbriggs/evt/controls/message-db";
+import * as mdatac from "@mbriggs/evt/controls/message-data";
 import * as streamc from "@mbriggs/evt/controls/stream";
 import snakecase from "snakecase-keys";
 
@@ -13,7 +13,7 @@ describe("MessageDB", () => {
     it("puts a single message", async () => {
       let exec = await dbc.exec();
       let stream = streamc.uniqueExample();
-      let msg = mdbc.message.example();
+      let msg = mdatac.example();
       msg.streamName = stream;
       let expected = snakecase(msg, { deep: true });
 

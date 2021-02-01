@@ -1,13 +1,12 @@
 import { v4 as uuid } from "uuid";
 
-import * as mdb from "../../message-db";
+import * as data from "./data";
+import * as metadata from "./metadata";
+import * as time from "./time";
+import * as stream from "./stream";
+import { MessageData } from "../messaging";
 
-import * as data from "../data";
-import * as metadata from "../metadata";
-import * as time from "../time";
-import * as stream from "../stream";
-
-export function example(): mdb.Message {
+export function example(): MessageData {
   return {
     id: id(),
     type: type(),
@@ -20,11 +19,11 @@ export function example(): mdb.Message {
   };
 }
 
-export function alternate(): mdb.Message {
+export function alternate(): MessageData {
   return { ...example(), data: data.alternate() };
 }
 
-export function newExample(): mdb.Message {
+export function newExample(): MessageData {
   return {
     id: id(),
     type: type(),
@@ -37,7 +36,7 @@ export function newExample(): mdb.Message {
   };
 }
 
-export function examples(streamName: string, amount: number): mdb.Message[] {
+export function examples(streamName: string, amount: number): MessageData[] {
   let results = [];
 
   for (let position = 0; position < amount; position += 1) {

@@ -1,14 +1,12 @@
-import * as timec from "./time";
-import * as mdb from "../message-db";
+import { MessageDataMetadata } from "../messaging";
 
-export function example(): mdb.Metadata {
+export function example(): MessageDataMetadata {
   return {
     causationMessageStreamName: causationMessageStream(),
     causationMessagePosition: causationMessagePosition(),
     causationMessageGlobalPosition: causationMessageGlobalPosition(),
     correlationStreamName: correlationStreamName(),
     replyStreamName: replyStreamName(),
-    time: time(),
     schemaVersion: schemaVersion(),
   };
 }
@@ -35,8 +33,4 @@ export function replyStreamName() {
 
 export function schemaVersion() {
   return "1";
-}
-
-export function time() {
-  return timec.example();
 }

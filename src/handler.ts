@@ -1,8 +1,8 @@
-import * as mdb from "./message-db";
 import { isFunction } from "lodash";
-import { Cls } from "@mbriggs/evt/interfaces";
+import { Cls } from "./interfaces";
+import { MessageData } from "./messaging";
 
-export type Handler<C = any> = (msg: mdb.Message, ctx: C) => Promise<any> | void;
+export type Handler<C = any> = (msg: MessageData, ctx: C) => Promise<any> | any;
 export interface HandlerBuilder<C = any> {
   handler(): Handler<C>;
 }
@@ -15,14 +15,14 @@ export function toHandler<C>(handler: Handler<C> | HandlerBuilder<C>): Handler<C
   return handler.handler();
 }
 
-export type MessageHandler<T, C> = (msg: T, ctx?: C) => Promise<any> | void;
+export type MessageHandler<T, C> = (msg: T, ctx?: C) => Promise<any> | any;
 
 export class Dispatcher<C = any> implements HandlerBuilder<C> {
   userTypes = new Map<string, Cls<any>>();
   messageHandlers = new Map<string, MessageHandler<any, C>>();
 
-  handle<T>(cls: Cls<T>, handler: (msg: T, ctx?: C) => Promise<any> | void) {
-    if (!(cls as any).fromMessageDB) {
+  handle<T>(cls: Cls<T>, handler: (msg: T, ctx?: C) => Promise<any> | any) {
+    if (!(cls as any).fromMessageData) {
       throw new Error(`${cls.name} must be a message class`);
     }
     let type = cls.name;
@@ -31,7 +31,7 @@ export class Dispatcher<C = any> implements HandlerBuilder<C> {
   }
 
   handler(): Handler<C> {
-    return (data: mdb.Message, ctx?: any) => {
+    return (data: MessageData, ctx?: any) => {
       if (!this.userTypes.has(data.type)) {
         return;
       }
@@ -39,7 +39,7 @@ export class Dispatcher<C = any> implements HandlerBuilder<C> {
       let cls = this.userTypes.get(data.type);
       let handler = this.messageHandlers.get(data.type);
 
-      let msg = (cls as any).fromMessageDB(data);
+      let msg = (cls as any).fromMessageData(data);
 
       let result = handler(msg, ctx);
 

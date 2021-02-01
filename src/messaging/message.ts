@@ -1,10 +1,11 @@
 import { metadata } from "../metadata";
-import { MessageData } from "./message-data";
+import { getClassName } from "../inspect";
 
-import * as mdb from "../message-db";
 import * as stream from "../stream";
 import * as attributes from "../attributes";
-import { getClassName } from "@mbriggs/evt/inspect";
+
+import { MessageData } from "./data";
+import { MessageMetadata } from "./message/message-metadata";
 
 export class Message {
   static follow<T extends Message>(other: T) {
@@ -22,7 +23,7 @@ export class Message {
     return next;
   }
 
-  static fromMessageDB<T extends Message>(data: mdb.Message): T {
+  static fromMessageData<T extends Message>(data: MessageData): T {
     if (this.name !== data.type) {
       throw new Error(`Cannot create ${this.name} from ${data.type}`);
     }
@@ -36,8 +37,8 @@ export class Message {
     return msg as any;
   }
 
-  metadata(): MessageData {
-    return metadata(this, MessageData);
+  metadata(): MessageMetadata {
+    return metadata(this, MessageMetadata);
   }
 
   messageIdentifier() {
@@ -92,7 +93,7 @@ export class Message {
     return correlationStreamName === streamName;
   }
 
-  toMessageDB(): mdb.Message {
+  toMessageData(): MessageData {
     let data = attributes.getAll(this);
     let type = getClassName(this);
 

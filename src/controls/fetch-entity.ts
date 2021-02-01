@@ -1,15 +1,11 @@
 import * as ent from "../entity";
+import { Entry } from "../entity";
 import * as hnd from "../handler";
-
-import * as mdbc from "./message-db";
 import * as mesgc from "./message";
+import * as mesgingc from "./messaging";
 import * as streamc from "./stream";
 
 import { partial } from "lodash";
-import * as mdb from "@mbriggs/evt/message-db";
-import { Handler, HandlerBuilder } from "../handler";
-import { Cache, Entry } from "../entity";
-import { Cls } from "@mbriggs/evt";
 
 export class MyEntity {
   field1: string;
@@ -30,7 +26,7 @@ export function fetchMemory() {
 }
 
 export async function fetch() {
-  let iterate = await mdbc.iterate();
+  let iterate = await mesgingc.iterate();
   return partial(fetchMemory(), iterate);
 }
 

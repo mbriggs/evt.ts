@@ -1,8 +1,8 @@
 import { partial } from "lodash";
 
-import * as pos from "../position";
+import * as mesgc from "./messaging";
 
-import * as mdbc from "./message-db";
+import * as pos from "../position";
 
 export function name() {
   return "name";
@@ -15,11 +15,11 @@ export async function settings() {
 }
 
 export async function retrieve() {
-  let getLast = await mdbc.getLast();
+  let getLast = await mesgc.getLast();
   return partial(pos.retrieve, getLast);
 }
 
 export async function record() {
-  let put = await mdbc.put();
+  let put = await mesgc.put();
   return partial(pos.record, put);
 }

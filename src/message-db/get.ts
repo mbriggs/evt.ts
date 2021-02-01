@@ -1,14 +1,17 @@
-import * as stream from "@mbriggs/evt/stream";
-import { Message, Settings } from "./model";
-import { loadData } from "@mbriggs/evt/message-db/load-data";
-import { Exec } from "@mbriggs/evt/interfaces";
+import { Settings } from "./model";
+import { loadData } from "./load-data";
+import { MessageData } from "../messaging";
+
+import * as stream from "../stream";
+
+import { Exec } from "../interfaces";
 
 export function get(
   exec: Exec,
   settings: Settings,
   streamName: string,
   position: number = null
-): Promise<Message[]> {
+): Promise<MessageData[]> {
   let result;
 
   if (stream.isCategory(streamName)) {
@@ -25,7 +28,7 @@ async function getStream(
   settings: Settings,
   streamName: string,
   position: number = null
-): Promise<Message[]> {
+): Promise<MessageData[]> {
   const q =
     "SELECT * FROM get_stream_messages($1::varchar, $2::bigint, $3::bigint, $4::varchar)";
   const { batchSize, condition } = settings;
@@ -42,7 +45,7 @@ async function getCategory(
   settings: Settings,
   streamName: string,
   position: number = null
-): Promise<Message[]> {
+): Promise<MessageData[]> {
   const { batchSize, correlation, groupMember, groupSize, condition } = settings;
 
   const q = `
