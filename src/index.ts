@@ -1,5 +1,5 @@
 import * as stream from "./stream";
-import { Handler } from "./handler";
+import { Handler } from "./interfaces";
 import { MessageData } from "./messaging";
 
 export async function startConsumer(
@@ -15,8 +15,8 @@ export async function startConsumer(
 
 export * from "./attributes";
 export * from "./messaging";
-export * from "./handler";
 export * from "./interfaces";
 export * from "./host";
+export { Dispatcher } from "./handler";
 
 export { stream };

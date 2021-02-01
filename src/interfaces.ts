@@ -1,12 +1,13 @@
 import { Entry } from "./entity";
-import { Handler, HandlerBuilder } from "./handler";
 import { GetLast, Get, Put, Iterate, Write, MessageData } from "./messaging";
+
+export type Handler<C = any> = (msg: MessageData, ctx: C) => Promise<any> | any;
 
 export type Exec = (text: string, values: any[]) => Promise<any>;
 
 export type FetchEntity<T> = (
   entity: Cls<T>,
-  projection: Handle<T>,
+  projection: Handler<T>,
   category: string,
   id: string
 ) => Promise<Entry<T>>;
@@ -45,5 +46,3 @@ export interface Cls<T> {
 
   name: string;
 }
-
-export type Handle<T = any> = Handler<T> | HandlerBuilder<T>;

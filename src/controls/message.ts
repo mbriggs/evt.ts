@@ -1,7 +1,6 @@
 import { attribute } from "../attributes";
 import { Message } from "../messaging";
 
-import * as mdbc from "./message-db";
 import * as mdatac from "./message-data";
 
 import { field1, field2, field3 } from "./data";

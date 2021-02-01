@@ -1,27 +1,14 @@
-import { isFunction } from "lodash";
 import { Cls } from "./interfaces";
 import { MessageData } from "./messaging";
+import * as evt from "./interfaces";
 
-export type Handler<C = any> = (msg: MessageData, ctx: C) => Promise<any> | any;
-export interface HandlerBuilder<C = any> {
-  handler(): Handler<C>;
-}
+export type Handler<T, C> = (msg: T, ctx?: C) => Promise<any> | any;
 
-export function toHandler<C>(handler: Handler<C> | HandlerBuilder<C>): Handler<C> {
-  if (isFunction(handler)) {
-    return handler;
-  }
-
-  return handler.handler();
-}
-
-export type MessageHandler<T, C> = (msg: T, ctx?: C) => Promise<any> | any;
-
-export class Dispatcher<C = any> implements HandlerBuilder<C> {
+export class Dispatcher<C = any> {
   userTypes = new Map<string, Cls<any>>();
-  messageHandlers = new Map<string, MessageHandler<any, C>>();
+  messageHandlers = new Map<string, Handler<any, C>>();
 
-  handle<T>(cls: Cls<T>, handler: (msg: T, ctx?: C) => Promise<any> | any) {
+  handle<T>(cls: Cls<T>, handler: Handler<T, C>) {
     if (!(cls as any).fromMessageData) {
       throw new Error(`${cls.name} must be a message class`);
     }
@@ -30,7 +17,7 @@ export class Dispatcher<C = any> implements HandlerBuilder<C> {
     this.messageHandlers.set(type, handler);
   }
 
-  handler(): Handler<C> {
+  handler(): evt.Handler<C> {
     return (data: MessageData, ctx?: any) => {
       if (!this.userTypes.has(data.type)) {
         return;

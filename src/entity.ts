@@ -2,9 +2,8 @@ import { cloneDeep } from "lodash";
 
 import * as stream from "./stream";
 
-import { Handler, HandlerBuilder, toHandler } from "./handler";
 import { Iterate } from "./messaging";
-import { Cls } from "./interfaces";
+import { Cls, Handler } from "./interfaces";
 
 export type Entry<T> = [T, number];
 
@@ -17,12 +16,11 @@ export async function fetchEntity<T>(
   cache: Cache<T>,
   iterate: Iterate,
   Entity: Cls<T>,
-  projection: Handler<T> | HandlerBuilder<T>,
+  projection: Handler<T>,
   category: string,
   id: string
 ): Promise<Entry<T>> {
   let streamName = stream.name({ category, id });
-  let project = toHandler(projection);
 
   let [entity, version] = cache.get(id) || [null, null];
 
@@ -35,7 +33,7 @@ export async function fetchEntity<T>(
 
   for await (let msg of iterate(streamName, version)) {
     entity = cloneDeep(entity);
-    await project(msg, entity);
+    await projection(msg, entity);
     version = msg.position;
   }
 

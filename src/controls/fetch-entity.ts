@@ -1,6 +1,7 @@
 import * as ent from "../entity";
-import { Entry } from "../entity";
 import * as hnd from "../handler";
+import { Cls, Handler } from "../interfaces";
+
 import * as mesgc from "./message";
 import * as mesgingc from "./messaging";
 import * as streamc from "./stream";
@@ -25,16 +26,23 @@ export function fetchMemory() {
   return partial(ent.fetchEntity, new Map());
 }
 
-export async function fetch() {
+export async function fetch<T>(): Promise<
+  (
+    entity: Cls<T>,
+    projection: Handler<T>,
+    category: string,
+    id: string
+  ) => Promise<ent.Entry<MyEntity>>
+> {
   let iterate = await mesgingc.iterate();
-  return partial(fetchMemory(), iterate);
+  return partial(fetchMemory(), iterate) as any;
 }
 
 export async function fetchControls(): Promise<
-  (category: string, id: string) => Promise<Entry<MyEntity>>
+  (category: string, id: string) => Promise<ent.Entry<MyEntity>>
 > {
-  let f = await fetch();
-  return partial(f, MyEntity, Dispatcher) as any;
+  let f = await fetch<MyEntity>();
+  return partial(f, MyEntity, Dispatcher.handler()) as any;
 }
 
 export async function fetchUnique() {
