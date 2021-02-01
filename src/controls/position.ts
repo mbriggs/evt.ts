@@ -8,6 +8,12 @@ export function name() {
   return "name";
 }
 
+export async function settings() {
+  return {
+    positionUpdateInterval: 5,
+  };
+}
+
 export async function retrieve() {
   let getLast = await mdbc.getLast();
   return partial(pos.retrieve, getLast);

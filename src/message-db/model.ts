@@ -1,14 +1,3 @@
-export type Exec = (text: string, values: any[]) => Promise<any>;
-
-export type Get = (streamName: string, position?: number) => Promise<Message[]>;
-export type GetLast = (streamName: string) => Promise<Message>;
-export type Put = (
-  batch: Message[] | Message,
-  streamName: string,
-  expectedVersion?: number
-) => Promise<Message>;
-export type Iterate = (streamName: string, position?: number) => AsyncGenerator<Message>;
-
 export class ExpectedVersionError extends Error {}
 
 export interface Metadata {

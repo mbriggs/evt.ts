@@ -1,5 +1,6 @@
-import { Exec, Message, Settings } from "@mbriggs/evt/message-db/model";
+import { Message, Settings } from "@mbriggs/evt/message-db/model";
 import { loadData } from "@mbriggs/evt/message-db/load-data";
+import { Exec } from "@mbriggs/evt/interfaces";
 
 export async function getLast(
   exec: Exec,

@@ -2,14 +2,15 @@ import * as mdb from "../message-db";
 import { Message } from "./message";
 import { partial } from "lodash";
 import { log } from "./logging";
+import { Put } from "@mbriggs/evt/interfaces";
 
 export interface Write {
-  (stream: string, msg: Message, expectedVersion?: number): Promise<any>;
+  (msg: Message, stream: string, expectedVersion?: number): Promise<any>;
 
-  initial(stream: string, msg: Message): Promise<any>;
+  initial(msg: Message, stream: string): Promise<any>;
 }
 
-export function writer(put: mdb.Put): Write {
+export function writer(put: Put): Write {
   let writer: any = partial(write, put);
 
   writer.initial = (stream: string, batch: Message | Array<Message>) =>
@@ -19,7 +20,7 @@ export function writer(put: mdb.Put): Write {
 }
 
 export function write(
-  put: mdb.Put,
+  put: Put,
   stream: string,
   batch: Message | Array<Message>,
   expectedVersion: number = null

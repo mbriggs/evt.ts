@@ -1,7 +1,8 @@
-import * as mdb from "./message-db";
 import * as stream from "./stream";
-import { Cls, Handler, HandlerBuilder, toHandler } from "./handler";
+
+import { Handler, HandlerBuilder, toHandler } from "./handler";
 import { cloneDeep } from "lodash";
+import { Cls, Iterate } from "./interfaces";
 
 export type Entry<T> = [T, number];
 
@@ -12,7 +13,7 @@ export interface Cache<T> {
 
 export async function fetchEntity<T>(
   cache: Cache<T>,
-  iterate: mdb.Iterate,
+  iterate: Iterate,
   Entity: Cls<T>,
   projection: Handler<T> | HandlerBuilder<T>,
   category: string,

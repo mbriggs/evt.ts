@@ -1,8 +1,9 @@
 import * as mdb from "./message-db";
 import { isFunction } from "lodash";
+import { Cls } from "@mbriggs/evt/interfaces";
 
-export type Handler<C> = (msg: mdb.Message, ctx: C) => Promise<any> | void;
-export interface HandlerBuilder<C> {
+export type Handler<C = any> = (msg: mdb.Message, ctx: C) => Promise<any> | void;
+export interface HandlerBuilder<C = any> {
   handler(): Handler<C>;
 }
 
@@ -14,18 +15,13 @@ export function toHandler<C>(handler: Handler<C> | HandlerBuilder<C>): Handler<C
   return handler.handler();
 }
 
-export type MessageHandler<T, C> = (msg: T, ctx: C) => Promise<any> | void;
+export type MessageHandler<T, C> = (msg: T, ctx?: C) => Promise<any> | void;
 
-export interface Cls<T> {
-  new (...args: any[]): T;
-  name: string;
-}
-
-export class Dispatcher<C> implements HandlerBuilder<C> {
+export class Dispatcher<C = any> implements HandlerBuilder<C> {
   userTypes = new Map<string, Cls<any>>();
   messageHandlers = new Map<string, MessageHandler<any, C>>();
 
-  handle<T>(cls: Cls<T>, handler: (msg: T, ctx: C) => Promise<any> | void) {
+  handle<T>(cls: Cls<T>, handler: (msg: T, ctx?: C) => Promise<any> | void) {
     if (!(cls as any).fromMessageDB) {
       throw new Error(`${cls.name} must be a message class`);
     }

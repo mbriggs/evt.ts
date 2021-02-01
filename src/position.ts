@@ -2,6 +2,7 @@ import * as mdb from "./message-db";
 import * as stream from "./stream";
 import { Message } from "./messaging";
 import { attribute } from "./attributes";
+import { GetLast, Put } from "./interfaces";
 
 export interface Settings {
   positionUpdateInterval: number;
@@ -11,7 +12,7 @@ export class Recorded extends Message {
   @attribute() position: number;
 }
 
-export async function retrieve(getLast: mdb.GetLast, name: string, streamName: string) {
+export async function retrieve(getLast: GetLast, name: string, streamName: string) {
   let posStream = positionStreamName(name, streamName);
   let existing = await getLast(posStream);
 
@@ -19,7 +20,7 @@ export async function retrieve(getLast: mdb.GetLast, name: string, streamName: s
 }
 
 export async function record(
-  put: mdb.Put,
+  put: Put,
   settings: Settings,
   name: string,
   lastWrite: number,

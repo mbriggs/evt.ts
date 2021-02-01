@@ -29,5 +29,5 @@
       "@mbriggs/evt/*": ["./src/*"]
     }
   },
-  "include": ["./src/**/*", "./tests/**/*"]
+  "include": ["./src/**/*", "./tests/**/*", "./examples/**/*"]
 }

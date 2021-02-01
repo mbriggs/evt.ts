@@ -1,6 +1,7 @@
 import * as stream from "@mbriggs/evt/stream";
-import { Exec, Message, Settings } from "./model";
+import { Message, Settings } from "./model";
 import { loadData } from "@mbriggs/evt/message-db/load-data";
+import { Exec } from "@mbriggs/evt/interfaces";
 
 export function get(
   exec: Exec,

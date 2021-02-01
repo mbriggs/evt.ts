@@ -3,6 +3,7 @@ import * as mdb from "../message-db";
 import * as dbc from "./db";
 
 import * as message from "./message-db/message";
+import { Get, GetLast, Iterate, Put } from "@mbriggs/evt/interfaces";
 
 export { message };
 
@@ -16,27 +17,27 @@ export function settings(): mdb.Settings {
   };
 }
 
-export async function get(): Promise<mdb.Get> {
+export async function get(): Promise<Get> {
   let exec = await dbc.exec();
   let s = settings();
 
   return partial(mdb.get, exec, s);
 }
 
-export async function getLast(): Promise<mdb.GetLast> {
+export async function getLast(): Promise<GetLast> {
   let exec = await dbc.exec();
   let s = settings();
 
   return partial(mdb.getLast, exec, s);
 }
 
-export async function put(): Promise<mdb.Put> {
+export async function put(): Promise<Put> {
   let exec = await dbc.exec();
 
   return partial(mdb.put, exec);
 }
 
-export async function iterate(): Promise<mdb.Iterate> {
+export async function iterate(): Promise<Iterate> {
   let g = await get();
 
   return partial(mdb.iterate, g);

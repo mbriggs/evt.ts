@@ -1,5 +1,6 @@
-import { Get, Message } from "./model";
+import { Message } from "./model";
 import { isCategory } from "@mbriggs/evt/stream";
+import { Get } from "@mbriggs/evt/interfaces";
 
 export async function* iterate(
   get: Get,

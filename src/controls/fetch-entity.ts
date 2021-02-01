@@ -7,8 +7,9 @@ import * as streamc from "./stream";
 
 import { partial } from "lodash";
 import * as mdb from "@mbriggs/evt/message-db";
-import { Cls, Handler, HandlerBuilder } from "../handler";
+import { Handler, HandlerBuilder } from "../handler";
 import { Cache, Entry } from "../entity";
+import { Cls } from "@mbriggs/evt";
 
 export class MyEntity {
   field1: string;

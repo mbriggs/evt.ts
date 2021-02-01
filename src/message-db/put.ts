@@ -1,7 +1,8 @@
 import { v4 as uuid } from "uuid";
 import snakecase from "snakecase-keys";
-import { Exec, ExpectedVersionError, Message } from "@mbriggs/evt/message-db/model";
+import { ExpectedVersionError, Message } from "@mbriggs/evt/message-db/model";
 import { log, logData } from "./logging";
+import { Exec } from "@mbriggs/evt/interfaces";
 
 export async function put(
   exec: Exec,

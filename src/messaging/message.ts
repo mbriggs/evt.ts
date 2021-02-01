@@ -60,10 +60,6 @@ export class Message {
     return `${metadata.causationMessageStreamName}/${metadata.causationMessagePosition}`;
   }
 
-  get sequence() {
-    return this.metadata().globalPosition;
-  }
-
   correlate(streamName: string) {
     this.metadata().correlationStreamName = streamName;
   }
