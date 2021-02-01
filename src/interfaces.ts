@@ -46,3 +46,5 @@ export interface Cls<T> {
 
   name: string;
 }
+
+export type Timestamp = () => string;
