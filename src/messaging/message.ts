@@ -23,6 +23,14 @@ export class Message {
     return next;
   }
 
+  static build(previous: Message) {
+    if (previous) {
+      return this.follow(previous);
+    } else {
+      return new this();
+    }
+  }
+
   static fromMessageData<T extends Message>(data: MessageData): T {
     if (this.name !== data.type) {
       throw new Error(`Cannot create ${this.name} from ${data.type}`);

@@ -48,3 +48,4 @@ export interface Cls<T> {
 }
 
 export type Timestamp = () => string;
+export type RandomID = () => string;

@@ -1,4 +1,5 @@
-import { host } from "@mbriggs/evt";
+import { host, compose } from "@mbriggs/evt";
 import startAccount from "./account/start";
+import startFundsTransfer from "./funds-transfer/start";
 
-host({ name: "accounts" }, startAccount);
+host({ name: "accounts" }, compose(startAccount, startFundsTransfer));
