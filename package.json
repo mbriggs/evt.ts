@@ -1,5 +1,5 @@
 {
-  "name": "evt",
+  "name": "@mbriggs/evt",
   "version": "0.0.1",
   "description": "event toolkit",
   "main": "src/index.js",
