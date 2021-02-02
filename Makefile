@@ -1,5 +1,8 @@
 .DEFAULT_GOAL:=build
 
+stats:
+	cloc --exclude-dir=.idea,node_modules .
+
 clean:
 	find src tests | grep '\.js$$\|\.d\.ts$$' | xargs -r rm
 	rm -rf dist
