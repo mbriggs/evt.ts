@@ -1,5 +1,6 @@
 import { metadata } from "./metadata";
 import { getClass } from "./inspect";
+import { isString } from "util";
 
 class AttributesMetadata {
   propNames: Set<string> = new Set<string>();
@@ -52,5 +53,53 @@ export function set(msg: any, data: any) {
     }
 
     msg[prop] = data[prop];
+  }
+}
+
+export type CopyAttribute = string | [from: string, to: string];
+
+function copyRule(propName: string, rules?: CopyAttribute[]) {
+  if (!rules) {
+    return [propName, propName];
+  }
+
+  if (rules.includes(propName)) {
+    return [propName, propName];
+  }
+
+  for (let rule of rules) {
+    if (Array.isArray(rule)) {
+      if (rule[0] === propName) {
+        return rule;
+      }
+    } else {
+      if (rule === propName) {
+        return [rule, rule];
+      }
+    }
+  }
+
+  return [null, null];
+}
+
+export function copy(source: any, dest: any, rules?: CopyAttribute[]) {
+  for (let prop of list(source)) {
+    let [srcProp, destProp] = copyRule(prop, rules);
+
+    if (!srcProp || !destProp) {
+      continue;
+    }
+
+    if (!has(source, srcProp)) {
+      continue;
+    }
+
+    if (!has(dest, destProp)) {
+      throw new Error(
+        `${destProp} is not an attribute on ${dest.constructor.name} ${JSON.stringify(dest)}`
+      );
+    }
+
+    dest[destProp] = source[srcProp];
   }
 }

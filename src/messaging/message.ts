@@ -8,15 +8,10 @@ import { MessageData } from "./data";
 import { MessageMetadata } from "./message/message-metadata";
 
 export class Message {
-  static follow<T extends Message>(other: T) {
+  static follow<T extends Message>(other: T, copy?: attributes.CopyAttribute[]) {
     let next: any = new this();
 
-    for (let prop of attributes.list(other)) {
-      if (!attributes.has(next, prop)) {
-        continue;
-      }
-      next[prop] = other[prop];
-    }
+    attributes.copy(other, next, copy);
 
     next.metadata().follow(other.metadata());
 
