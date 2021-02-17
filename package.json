@@ -1,6 +1,6 @@
 {
   "name": "@mbriggs/evt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "event toolkit",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "env TS_NODE_TRANSPILE_ONLY=true mocha --require='ts-node/register' --require='tsconfig-paths/register' --require='dotenv/config' --exit 'tests/**/*.test.ts'"
+    "test": "env TS_NODE_TRANSPILE_ONLY=true mocha 'tests/**/*.test.ts'"
   },
   "dependencies": {
     "@types/camelcase-keys": "^5.1.1",

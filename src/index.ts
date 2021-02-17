@@ -1,4 +1,5 @@
 import * as stream from "./stream";
+import * as attempt from "./attempt";
 import { Handler } from "./interfaces";
 import { MessageData } from "./messaging";
 
@@ -19,4 +20,4 @@ export * from "./interfaces";
 export * from "./host";
 export { Dispatcher } from "./handler";
 
-export { stream };
+export { stream, attempt };
