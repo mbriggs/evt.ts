@@ -7,3 +7,4 @@ examples/**/*.d.ts
 examples/**/*.js
 tests/**/*.d.ts
 tests/**/*.js
+*.iml
