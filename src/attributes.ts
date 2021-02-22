@@ -1,6 +1,5 @@
-import { metadata } from "./metadata";
-import { getClass } from "./inspect";
-import { isString } from "util";
+import metadata from "@mbriggs/metadata";
+import { getClass } from "@mbriggs/inspect";
 
 class AttributesMetadata {
   propNames: Set<string> = new Set<string>();

@@ -1,6 +1,6 @@
 {
   "name": "@mbriggs/evt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "event toolkit",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -11,6 +11,10 @@
     "test": "env TS_NODE_TRANSPILE_ONLY=true mocha 'tests/**/*.test.ts'"
   },
   "dependencies": {
+    "@mbriggs/attempt": "^0.1.0",
+    "@mbriggs/db": "^0.1.2",
+    "@mbriggs/inspect": "^0.1.1",
+    "@mbriggs/metadata": "^0.3.2",
     "@types/camelcase-keys": "^5.1.1",
     "@types/debug": "^4.1.5",
     "@types/lodash": "^4.14.168",

@@ -1,11 +1,13 @@
 import { Exec, Settings, Toolkit } from "./interfaces";
 import * as fs from "fs";
 import * as toolkit from "./toolkit";
-import * as db from "./db";
+import * as db from "@mbriggs/db";
+import * as context from "@mbriggs/context";
 
 interface Config {
   name: string;
   exec?: Exec;
+  ctx?: context.Context;
   settings?: Settings;
 }
 
@@ -19,15 +21,17 @@ export function compose(
 }
 
 export async function host(config: Config, start: (toolkit: Toolkit) => Promise<any>) {
-  let { exec, settings, name } = config;
+  let { exec, settings, name, ctx } = config;
+  if (!ctx) {
+    ctx = context.background();
+  }
 
   if (!exec) {
     let dbConfig = process.env.DATABASE_URL;
     if (!dbConfig) {
       throw new Error("DATABASE_URL is required when exec is not provided");
     }
-    let client = await db.connect(dbConfig);
-    exec = client.query.bind(client);
+    exec = await db.pool.build(dbConfig);
   }
 
   if (!settings) {
@@ -48,7 +52,7 @@ export async function host(config: Config, start: (toolkit: Toolkit) => Promise<
     }
   }
 
-  let tools = toolkit.messageDB(exec, settings);
+  let tools = toolkit.messageDB(ctx, exec, settings);
 
   await start(tools);
 }

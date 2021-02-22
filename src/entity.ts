@@ -5,6 +5,8 @@ import * as stream from "./stream";
 import { Iterate } from "./messaging";
 import { Cls, Handler } from "./interfaces";
 
+import { Context } from "@mbriggs/context";
+
 export type Entry<T> = [T, number];
 
 export interface Cache<T> {
@@ -18,6 +20,7 @@ export async function fetchEntity<T>(
   Entity: Cls<T>,
   projection: Handler<T>,
   category: string,
+  ctx: Context,
   id: string
 ): Promise<Entry<T>> {
   let streamName = stream.name({ category, id });
@@ -31,7 +34,7 @@ export async function fetchEntity<T>(
     version += 1;
   }
 
-  for await (let msg of iterate(streamName, version)) {
+  for await (let msg of iterate(ctx, streamName, version)) {
     entity = cloneDeep(entity);
     await projection(msg, entity);
     version = msg.position;

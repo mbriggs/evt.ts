@@ -1,13 +1,15 @@
 import { isCategory } from "../stream";
 import { MessageData, Get } from "../messaging";
+import { Context } from "@mbriggs/evt";
 
 export async function* iterate(
   get: Get,
+  ctx: Context,
   streamName: string,
   position: number = null
 ): AsyncGenerator<MessageData> {
   while (true) {
-    let messages = await get(streamName, position);
+    let messages = await get(ctx, streamName, position);
 
     if (messages.length == 0) {
       break;

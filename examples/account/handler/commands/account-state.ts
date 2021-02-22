@@ -6,6 +6,7 @@ import Close from "../../commands/close";
 
 import Opened from "../../events/opened";
 import Closed from "../../events/closed";
+import { Context } from "@mbriggs/context";
 
 export const streamName = (id) => stream.name({ id, category: "account" });
 
@@ -13,11 +14,12 @@ export async function open(
   read: ReadEntity<Account>,
   write: Write,
   timestamp: Timestamp,
-  open: Open
+  open: Open,
+  ctx: Context
 ) {
   let accountId = open.accountId;
 
-  let [account, version] = await read(accountId);
+  let [account, version] = await read(ctx, accountId);
 
   if (account.isOpen()) {
     return;
@@ -28,18 +30,19 @@ export async function open(
   let opened = Opened.follow(open);
   opened.processedTime = time;
 
-  await write(opened, streamName(accountId), version);
+  await write(ctx, opened, streamName(accountId), version);
 }
 
 export async function close(
   read: ReadEntity<Account>,
   write: Write,
   timestamp: Timestamp,
-  close: Close
+  close: Close,
+  ctx: Context
 ) {
   let accountId = close.accountId;
 
-  let [account, version] = await read(accountId);
+  let [account, version] = await read(ctx, accountId);
 
   if (account.isClosed()) {
     return;
@@ -50,5 +53,5 @@ export async function close(
   let closed = Closed.follow(close);
   closed.processedTime = time;
 
-  await write(closed, streamName(accountId), version);
+  await write(ctx, closed, streamName(accountId), version);
 }

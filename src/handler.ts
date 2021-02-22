@@ -4,8 +4,8 @@ import * as evt from "./interfaces";
 
 export type Handler<T, C> = (msg: T, ctx?: C) => Promise<any> | any;
 
-export class Dispatcher<C = any> {
-  userTypes = new Map<string, Cls<any>>();
+export class Dispatcher<C> {
+  userTypes = new Map<string, Cls>();
   messageHandlers = new Map<string, Handler<any, C>>();
 
   handle<T>(cls: Cls<T>, handler: Handler<T, C>) {

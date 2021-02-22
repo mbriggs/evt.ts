@@ -4,20 +4,21 @@ import { MessageData } from "../messaging";
 
 import * as stream from "../stream";
 
-import { Exec } from "../interfaces";
+import { Context, Exec } from "../interfaces";
 
 export function get(
   exec: Exec,
   settings: Settings,
+  ctx: Context,
   streamName: string,
   position: number = null
 ): Promise<MessageData[]> {
   let result;
 
   if (stream.isCategory(streamName)) {
-    result = getCategory(exec, settings, streamName, position);
+    result = getCategory(exec, settings, ctx, streamName, position);
   } else {
-    result = getStream(exec, settings, streamName, position);
+    result = getStream(exec, settings, ctx, streamName, position);
   }
 
   return result;
@@ -26,6 +27,7 @@ export function get(
 async function getStream(
   exec: Exec,
   settings: Settings,
+  ctx: Context,
   streamName: string,
   position: number = null
 ): Promise<MessageData[]> {
@@ -35,14 +37,15 @@ async function getStream(
 
   let params = [streamName, position, batchSize, condition];
 
-  let results = await exec(q, params);
+  let results = await exec(ctx, q, params);
 
-  return results.rows.map(loadData);
+  return results.map(loadData);
 }
 
 async function getCategory(
   exec: Exec,
   settings: Settings,
+  ctx: Context,
   streamName: string,
   position: number = null
 ): Promise<MessageData[]> {
@@ -64,7 +67,7 @@ async function getCategory(
     condition,
   ];
 
-  let results = await exec(q, params);
+  let results = await exec(ctx, q, params);
 
-  return results.rows.map(loadData);
+  return results.map(loadData);
 }

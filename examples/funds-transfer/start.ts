@@ -10,7 +10,7 @@ import { accountEventsHandler } from "./handler/account-events";
 
 const name = "fundsTransferService";
 
-export default async function start({ fetch, write, consumer }: Toolkit) {
+export default async function start({ ctx, fetch, write, consumer }: Toolkit) {
   let readFundsTransfer = partial(
     fetch,
     FundsTransfer,
@@ -19,17 +19,17 @@ export default async function start({ fetch, write, consumer }: Toolkit) {
   );
 
   let commands = startConsumer(
-    consumer(name, "fundsTransfer:command"),
+    consumer(ctx, name, "fundsTransfer:command"),
     commandsHandler(readFundsTransfer, write)
   );
 
   let events = startConsumer(
-    consumer(name, "fundsTransfer"),
+    consumer(ctx, name, "fundsTransfer"),
     eventsHandler(readFundsTransfer, write)
   );
 
   let accountEvents = startConsumer(
-    consumer(name, "account"),
+    consumer(ctx, name, "account"),
     accountEventsHandler(readFundsTransfer, write)
   );
 

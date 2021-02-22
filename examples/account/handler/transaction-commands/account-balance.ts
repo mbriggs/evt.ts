@@ -7,6 +7,7 @@ import Account from "../../account";
 import Deposited from "../../events/deposited";
 import WithdrawalRejected from "../../events/withdrawal-rejected";
 import Withdrawn from "../../events/withdrawn";
+import { Context } from "@mbriggs/context";
 
 export const accountStreamName = (id) => stream.name({ id, category: "account" });
 
@@ -14,11 +15,12 @@ export async function deposit(
   read: ReadEntity<Account>,
   write: Write,
   timestamp: Timestamp,
-  deposit: Deposit
+  deposit: Deposit,
+  ctx: Context
 ) {
   let accountId = deposit.accountId;
 
-  let [account, version] = await read(accountId);
+  let [account, version] = await read(ctx, accountId);
 
   let sequence = deposit.metadata().globalPosition;
 
@@ -34,18 +36,19 @@ export async function deposit(
 
   let streamName = accountStreamName(accountId);
 
-  await write(deposit, streamName, version);
+  await write(ctx, deposit, streamName, version);
 }
 
 export async function withdraw(
   read: ReadEntity<Account>,
   write: Write,
   timestamp: Timestamp,
-  withdraw: Withdraw
+  withdraw: Withdraw,
+  ctx: Context
 ) {
   let accountId = withdraw.accountId;
 
-  let [account, version] = await read(accountId);
+  let [account, version] = await read(ctx, accountId);
 
   let sequence = withdraw.metadata().globalPosition;
 
@@ -62,7 +65,7 @@ export async function withdraw(
     withdrawalRejected.processedTime = time;
     withdrawalRejected.sequence = sequence;
 
-    await write(withdrawalRejected, streamName, version);
+    await write(ctx, withdrawalRejected, streamName, version);
 
     return;
   }
@@ -71,5 +74,5 @@ export async function withdraw(
   withdrawn.processedTime = time;
   withdrawn.sequence = sequence;
 
-  await write(withdrawn, streamName, version);
+  await write(ctx, withdrawn, streamName, version);
 }

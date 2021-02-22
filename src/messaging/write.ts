@@ -5,23 +5,26 @@ import { log } from "./logging";
 import { Put } from "./storage";
 import { MessageData } from "./data";
 
-export interface Write {
-  (msg: Message, stream: string, expectedVersion?: number): Promise<any>;
+import { Context } from "@mbriggs/context";
 
-  initial(msg: Message, stream: string): Promise<any>;
+export interface Write {
+  (ctx: Context, msg: Message, stream: string, expectedVersion?: number): Promise<any>;
+
+  initial(ctx: Context, msg: Message, stream: string): Promise<any>;
 }
 
 export function writer(put: Put): Write {
   let writer: any = partial(write, put);
 
-  writer.initial = (stream: string, batch: Message | Array<Message>) =>
-    writer(stream, batch, -1);
+  writer.initial = (ctx: Context, stream: string, batch: Message | Array<Message>) =>
+    writer(ctx, stream, batch, -1);
 
   return writer;
 }
 
 export function write(
   put: Put,
+  ctx: Context,
   stream: string,
   batch: Message | Array<Message>,
   expectedVersion: number = null
@@ -34,5 +37,5 @@ export function write(
     data = batch.toMessageData();
   }
 
-  return put(data, stream, expectedVersion);
+  return put(ctx, data, stream, expectedVersion);
 }

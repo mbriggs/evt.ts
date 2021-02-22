@@ -1,5 +1,6 @@
 import { Message, Timestamp, Write, stream, RandomID } from "@mbriggs/evt";
 import { Transfer } from "@mbriggs/funds-transfer-component/commands";
+import { Context } from "@mbriggs/context";
 
 const commandStreamName = (id: string) =>
   stream.name({ category: "fundsTransfer", type: "command", id });
@@ -15,6 +16,7 @@ export async function withdraw(
   write: Write,
   identifier: RandomID,
   timestamp: Timestamp,
+  ctx: Context,
   {
     fundsTransferId,
     withdrawalAccountId,
@@ -32,7 +34,7 @@ export async function withdraw(
 
   let streamName = commandStreamName(fundsTransferId);
 
-  await write(transfer, streamName);
+  await write(ctx, transfer, streamName);
 
   return transfer;
 }

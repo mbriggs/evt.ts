@@ -2,6 +2,8 @@ import * as stream from "./stream";
 import { attribute } from "./attributes";
 import { GetLast, Put, MessageData, Message } from "./messaging";
 
+import { Context } from "@mbriggs/context";
+
 export interface Settings {
   positionUpdateInterval: number;
 }
@@ -10,9 +12,14 @@ export class Recorded extends Message {
   @attribute() position: number;
 }
 
-export async function retrieve(getLast: GetLast, name: string, streamName: string) {
+export async function retrieve(
+  getLast: GetLast,
+  ctx: Context,
+  name: string,
+  streamName: string
+) {
   let posStream = positionStreamName(name, streamName);
-  let existing = await getLast(posStream);
+  let existing = await getLast(ctx, posStream);
 
   return existing?.data?.position || -1;
 }
@@ -20,6 +27,7 @@ export async function retrieve(getLast: GetLast, name: string, streamName: strin
 export async function record(
   put: Put,
   settings: Settings,
+  ctx: Context,
   name: string,
   lastWrite: number,
   msg: MessageData
@@ -42,7 +50,7 @@ export async function record(
   let recorded = new Recorded();
   recorded.position = position;
 
-  await put(recorded.toMessageData(), streamName);
+  await put(ctx, recorded.toMessageData(), streamName);
 
   return position;
 }

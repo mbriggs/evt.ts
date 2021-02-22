@@ -1,20 +1,23 @@
 import { Entry } from "./entity";
 import { GetLast, Get, Put, Iterate, Write, MessageData } from "./messaging";
+import { Context } from "@mbriggs/context";
+import { Exec } from "@mbriggs/db";
+export type { Context, Exec };
 
 export type Handler<C = any> = (msg: MessageData, ctx: C) => Promise<any> | any;
-
-export type Exec = (text: string, values: any[]) => Promise<any>;
 
 export type FetchEntity<T> = (
   entity: Cls<T>,
   projection: Handler<T>,
   category: string,
+  ctx: Context,
   id: string
 ) => Promise<Entry<T>>;
 
-export type ReadEntity<T> = (id: string) => Promise<Entry<T>>;
+export type ReadEntity<T> = (ctx: Context, id: string) => Promise<Entry<T>>;
 
 export interface Toolkit {
+  ctx: Context;
   exec: Exec;
   settings: Settings;
   fetch: FetchEntity<any>;
@@ -27,9 +30,10 @@ export interface Toolkit {
 }
 
 export type Consumer = (
+  ctx: Context,
   consumerName: string,
   streamName: string
-) => AsyncGenerator<MessageData>;
+) => AsyncGenerator<[MessageData, Context]>;
 
 export interface Settings {
   pollInterval: number;
@@ -41,7 +45,7 @@ export interface Settings {
   positionUpdateInterval: number;
 }
 
-export interface Cls<T> {
+export interface Cls<T = any> {
   new (...args: any[]): T;
 
   name: string;

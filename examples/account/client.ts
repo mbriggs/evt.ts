@@ -1,6 +1,7 @@
 import { Message, Timestamp, Write, stream } from "@mbriggs/evt";
 import Withdraw from "@mbriggs/account-component/commands/withdraw";
 import Deposit from "@mbriggs/account-component/commands/deposit";
+import { Context } from "@mbriggs/context";
 
 const commandStreamName = (id: string) =>
   stream.name({ category: "account", type: "command", id });
@@ -14,6 +15,7 @@ export interface WithdrawParams {
 export async function withdraw(
   write: Write,
   timestamp: Timestamp,
+  ctx: Context,
   { withdrawalId, accountId, amount, previousMessage }: WithdrawParams
 ) {
   let withdraw = Withdraw.build(previousMessage);
@@ -25,7 +27,7 @@ export async function withdraw(
 
   let streamName = commandStreamName(accountId);
 
-  await write(withdraw, streamName);
+  await write(ctx, withdraw, streamName);
 
   return withdraw;
 }
@@ -40,6 +42,7 @@ export interface DepositParams {
 export async function deposit(
   write: Write,
   timestamp: Timestamp,
+  ctx: Context,
   { depositId, accountId, amount, previousMessage }: DepositParams
 ) {
   let deposit = Deposit.build(previousMessage);
@@ -51,7 +54,7 @@ export async function deposit(
 
   let streamName = commandStreamName(accountId);
 
-  await write(deposit, streamName);
+  await write(ctx, deposit, streamName);
 
   return deposit;
 }

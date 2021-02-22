@@ -1,7 +1,7 @@
 import { Get, GetLast, Iterate, Put } from "../messaging";
 import { partial } from "lodash";
 
-import * as dbc from "./db";
+import * as dbc from "@mbriggs/db/controls";
 import * as mdbc from "./message-db";
 import * as mdb from "../message-db";
 

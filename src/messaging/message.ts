@@ -1,5 +1,5 @@
-import { metadata } from "../metadata";
-import { getClassName } from "../inspect";
+import metadata from "@mbriggs/metadata";
+import { getClassName } from "@mbriggs/inspect";
 
 import * as stream from "../stream";
 import * as attributes from "../attributes";

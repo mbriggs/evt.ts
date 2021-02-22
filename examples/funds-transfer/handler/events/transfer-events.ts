@@ -8,17 +8,19 @@ import Withdrawn from "../../events/withdrawn";
 import Initiated from "../../events/initiated";
 import Transferred from "../../events/transferred";
 
-type WithdrawClient = (params: WithdrawParams) => Promise<any>;
-type DepositClient = (params: DepositParams) => Promise<any>;
+import { Context } from "@mbriggs/context";
+
+type WithdrawClient = (ctx: Context, params: WithdrawParams) => Promise<any>;
+type DepositClient = (ctx: Context, params: DepositParams) => Promise<any>;
 
 const transferStreamName = (id) => stream.name({ id, category: "fundsTransfer" });
 
-export async function initiated(withdraw: WithdrawClient, initiated: Initiated) {
+export async function initiated(withdraw: WithdrawClient, initiated: Initiated, ctx: Context) {
   let accountId = initiated.withdrawalAccountId;
   let withdrawalId = initiated.withdrawalId;
   let amount = initiated.amount;
 
-  await withdraw({
+  await withdraw(ctx, {
     withdrawalId,
     accountId,
     amount,
@@ -29,17 +31,18 @@ export async function initiated(withdraw: WithdrawClient, initiated: Initiated) 
 export async function withdrawn(
   read: ReadEntity<FundsTransfer>,
   deposit: DepositClient,
-  withdrawn: Withdrawn
+  withdrawn: Withdrawn,
+  ctx: Context
 ) {
   let fundsTransferId = withdrawn.fundsTransferId;
 
-  let [fundsTransfer, _] = await read(fundsTransferId);
+  let [fundsTransfer, _] = await read(ctx, fundsTransferId);
 
   let accountId = fundsTransfer.depositAccountId;
   let depositId = fundsTransfer.depositId;
   let amount = fundsTransfer.amount;
 
-  await deposit({
+  await deposit(ctx, {
     depositId,
     accountId,
     amount,
@@ -51,11 +54,12 @@ export async function deposited(
   read: ReadEntity<FundsTransfer>,
   write: Write,
   timestamp: Timestamp,
-  deposited: Deposited
+  deposited: Deposited,
+  ctx: Context
 ) {
   let fundsTransferId = deposited.fundsTransferId;
 
-  let [fundsTransfer, version] = await read(fundsTransferId);
+  let [fundsTransfer, version] = await read(ctx, fundsTransferId);
 
   if (fundsTransfer.hasTransferred()) {
     return;
@@ -70,5 +74,5 @@ export async function deposited(
 
   let streamName = transferStreamName(fundsTransferId);
 
-  await write(transferred, streamName, version);
+  await write(ctx, transferred, streamName, version);
 }

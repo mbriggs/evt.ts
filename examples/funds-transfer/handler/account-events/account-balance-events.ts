@@ -6,6 +6,7 @@ import {
   WithdrawalRejected as AccountWithdrawalRejected,
 } from "@mbriggs/account-component/events";
 import { Cancelled, Deposited, Withdrawn } from "@mbriggs/funds-transfer-component/events";
+import { Context } from "@mbriggs/context";
 
 const transferStreamName = (id: string) => stream.name({ category: "fundsTransfer", id });
 
@@ -13,12 +14,13 @@ export async function accountWithdrawn(
   read: ReadEntity<FundsTransfer>,
   write: Write,
   timestamp: Timestamp,
-  accountWithdrawn: AccountWithdrawn
+  accountWithdrawn: AccountWithdrawn,
+  ctx: Context
 ) {
   let correlationStreamName = accountWithdrawn.metadata().correlationStreamName;
   let fundsTransferId = stream.getId(correlationStreamName);
 
-  let [fundsTransfer, version] = await read(fundsTransferId);
+  let [fundsTransfer, version] = await read(ctx, fundsTransferId);
 
   if (fundsTransfer.hasWithdrawn()) {
     return;
@@ -31,19 +33,20 @@ export async function accountWithdrawn(
 
   let streamName = transferStreamName(fundsTransferId);
 
-  await write(withdrawn, streamName, version);
+  await write(ctx, withdrawn, streamName, version);
 }
 
 export async function accountDeposited(
   read: ReadEntity<FundsTransfer>,
   write: Write,
   timestamp: Timestamp,
-  accountDeposited: AccountDeposited
+  accountDeposited: AccountDeposited,
+  ctx: Context
 ) {
   let correlationStreamName = accountDeposited.metadata().correlationStreamName;
   let fundsTransferId = stream.getId(correlationStreamName);
 
-  let [fundsTransfer, version] = await read(fundsTransferId);
+  let [fundsTransfer, version] = await read(ctx, fundsTransferId);
 
   if (fundsTransfer.hasDeposited()) {
     return;
@@ -56,19 +59,20 @@ export async function accountDeposited(
 
   let streamName = transferStreamName(fundsTransferId);
 
-  await write(deposited, streamName, version);
+  await write(ctx, deposited, streamName, version);
 }
 
 export async function accountWithdrawalRejected(
   read: ReadEntity<FundsTransfer>,
   write: Write,
   timestamp: Timestamp,
-  accountWithdrawalRejected: AccountWithdrawalRejected
+  accountWithdrawalRejected: AccountWithdrawalRejected,
+  ctx: Context
 ) {
   let correlationStreamName = accountWithdrawalRejected.metadata().correlationStreamName;
   let fundsTransferId = stream.getId(correlationStreamName);
 
-  let [fundsTransfer, version] = await read(fundsTransferId);
+  let [fundsTransfer, version] = await read(ctx, fundsTransferId);
 
   if (fundsTransfer.hasCancelled()) {
     return;
@@ -81,5 +85,5 @@ export async function accountWithdrawalRejected(
 
   let streamName = transferStreamName(fundsTransferId);
 
-  await write(cancelled, streamName, version);
+  await write(ctx, cancelled, streamName, version);
 }

@@ -2,29 +2,30 @@ import { v4 as uuid } from "uuid";
 import snakecase from "snakecase-keys";
 import { ExpectedVersionError } from "./model";
 import { log, logData } from "./logging";
-import { Exec } from "../interfaces";
+import { Context, Exec } from "../interfaces";
 import { MessageData } from "../messaging";
 
 export async function put(
   exec: Exec,
+  ctx: Context,
   batch: MessageData[] | MessageData,
   streamName: string,
   expectedVersion: number = null
 ): Promise<any> {
   if (!Array.isArray(batch)) {
-    return putOne(exec, batch, streamName, expectedVersion);
+    return putOne(exec, ctx, batch, streamName, expectedVersion);
   }
 
   log("writing %n messages", batch.length);
   let results = [];
-  await exec("BEGIN", []);
+  await exec(ctx, "BEGIN", []);
 
   for (let message of batch) {
-    let result = await putOne(exec, message, streamName, expectedVersion);
+    let result = await putOne(exec, ctx, message, streamName, expectedVersion);
     try {
       results.push(result);
     } catch (e) {
-      await exec("ROLLBACK", []);
+      await exec(ctx, "ROLLBACK", []);
       throw e;
     }
 
@@ -32,13 +33,14 @@ export async function put(
       expectedVersion += 1;
     }
   }
-  await exec("COMMIT", []);
+  await exec(ctx, "COMMIT", []);
 
   return results;
 }
 
 async function putOne(
   exec: Exec,
+  ctx: Context,
   message: MessageData,
   streamName: string,
   expectedVersion: number = null
@@ -61,12 +63,12 @@ async function putOne(
   let result;
 
   try {
-    result = await exec(q, params);
+    result = await exec(ctx, q, params);
   } catch (e) {
     throw new ExpectedVersionError(e.message);
   }
 
   logData("result %o", result);
 
-  return result.rows[0].write_message;
+  return result[0].write_message;
 }

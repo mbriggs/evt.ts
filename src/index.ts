@@ -1,15 +1,17 @@
 import * as stream from "./stream";
-import * as attempt from "./attempt";
 import { Handler } from "./interfaces";
 import { MessageData } from "./messaging";
+import { ExpectedVersionError } from "./message-db";
+
+import { Context } from "@mbriggs/context";
 
 export async function startConsumer(
-  consumer: AsyncGenerator<MessageData>,
-  ...handlers: Handler[]
+  consumer: AsyncGenerator<[MessageData, Context]>,
+  ...handlers: Handler<Context>[]
 ) {
-  for await (let msg of consumer) {
+  for await (let [msg, ctx] of consumer) {
     for (let handler of handlers) {
-      await handler(msg, null);
+      await handler(msg, ctx);
     }
   }
 }
@@ -20,4 +22,4 @@ export * from "./interfaces";
 export * from "./host";
 export { Dispatcher } from "./handler";
 
-export { stream, attempt };
+export { stream, ExpectedVersionError };
