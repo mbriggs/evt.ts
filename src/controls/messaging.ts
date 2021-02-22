@@ -4,6 +4,7 @@ import { partial } from "lodash";
 import * as dbc from "@mbriggs/db/controls";
 import * as mdbc from "./message-db";
 import * as mdb from "../message-db";
+import * as mesg from "../messaging";
 
 export async function get(): Promise<Get> {
   let exec = await dbc.exec();
@@ -28,5 +29,5 @@ export async function put(): Promise<Put> {
 export async function iterate(): Promise<Iterate> {
   let g = await get();
 
-  return partial(mdb.iterate, g);
+  return partial(mesg.iterate, g);
 }

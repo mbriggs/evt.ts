@@ -1,7 +1,8 @@
 import assert from "assert";
-import { sanitize } from "./sanitize";
+import { sanitize } from "../message-db/sanitize";
 
 import * as mdb from "@mbriggs/evt/message-db";
+import * as mesg from "@mbriggs/evt/messaging";
 
 import * as dbc from "@mbriggs/db/controls";
 import * as mdbc from "@mbriggs/evt/controls/message-db";
@@ -11,7 +12,7 @@ import { partial } from "lodash";
 
 import * as context from "@mbriggs/context";
 
-describe("MessageDB", () => {
+describe("Messaging", () => {
   describe("Iterating over a stream", () => {
     it("reads all messages in batches", async () => {
       let ctx = context.background();
@@ -27,7 +28,7 @@ describe("MessageDB", () => {
 
       msgs = msgs.reverse();
 
-      for await (let msg of mdb.iterate(get, ctx, stream)) {
+      for await (let msg of mesg.iterate(get, ctx, stream)) {
         let expected = msgs.pop();
 
         sanitize(msg);

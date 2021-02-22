@@ -1,5 +1,8 @@
+import { MessageData } from "./data";
+import { Get } from "./storage";
+
 import { isCategory } from "../stream";
-import { MessageData, Get } from "../messaging";
+
 import { Context } from "@mbriggs/evt";
 
 export async function* iterate(
