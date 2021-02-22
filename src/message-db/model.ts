@@ -1,5 +1,3 @@
-export class ExpectedVersionError extends Error {}
-
 export interface Settings {
   batchSize: number;
   correlation: string;

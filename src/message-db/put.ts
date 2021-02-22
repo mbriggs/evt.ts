@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid";
 import snakecase from "snakecase-keys";
-import { ExpectedVersionError } from "./model";
 import { log, logData } from "./logging";
 import { Context, Exec } from "../interfaces";
 import { MessageData } from "../messaging";
+import { ExpectedVersionError } from "../expected-version-error";
 
 export async function put(
   exec: Exec,

@@ -7,6 +7,8 @@ import * as mdatac from "@mbriggs/evt/controls/message-data";
 import * as streamc from "@mbriggs/evt/controls/stream";
 import * as context from "@mbriggs/context";
 
+import { ExpectedVersionError } from "@mbriggs/evt";
+
 describe("MessageDB", () => {
   describe("Writing messages to steams", () => {
     it("errors with expected version error", async () => {
@@ -24,7 +26,7 @@ describe("MessageDB", () => {
         error = e;
       }
 
-      assert.strictEqual(mdb.ExpectedVersionError, error?.constructor);
+      assert.strictEqual(ExpectedVersionError, error?.constructor);
     });
   });
 });

@@ -1,7 +1,7 @@
 import * as stream from "./stream";
 import { Handler } from "./interfaces";
 import { MessageData } from "./messaging";
-import { ExpectedVersionError } from "./message-db";
+import { ExpectedVersionError } from "./expected-version-error";
 
 import { Context } from "@mbriggs/context";
 
